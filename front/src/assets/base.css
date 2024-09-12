@@ -1,0 +1,25 @@
+@import 'https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css';
+
+:root {
+  color: var(--bulma-body-color);
+  --footer-height: 45px;
+  --header-height: 45px;
+}
+body {
+  margin: 0;
+  height: 100vh;
+}
+
+#app {
+  height: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-align: center;
+  margin-bottom: 0;
+}
