@@ -1,7 +1,10 @@
 <template>
   <header>
     Kavout Kazh
-    <nav><a href="/">Home</a><a href="/history">History</a></nav>
+    <nav>
+      <router-link to="/">Home</router-link>
+      <router-link to="/history">History</router-link>
+    </nav>
   </header>
 </template>
 

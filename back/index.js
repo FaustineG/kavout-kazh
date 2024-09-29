@@ -7,22 +7,22 @@ const cors = require("cors");
 const Pool = require("pg").Pool;
 app.use(express.json()); // to support JSON-encoded bodies
 
-const pool = new Pool({
-  host: "localhost",
-  database: "cats",
-  user: "root",
-  password: "root",
+const config = {
+  host: "db_kavout_kazh",
+  database: "kazh",
+  user: "postgres",
+  password: "postgres",
   port: 5432,
-});
+};
+const pool = new Pool(config);
 
 app.use(
   cors({
     origin: "http://localhost:5173", // Allow requests from this origin
-  })
+  }),
+  express.static("public")
 );
 app.get("/actions", (req, res) => {
-  console.log(`GET /actions`);
-
   pool.query(
     `SELECT
     actions.action_id,

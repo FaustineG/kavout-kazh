@@ -1,26 +1,27 @@
 services:
   db:
+    container_name: db_kavout_kazh
     image: postgres
     restart: always
+    networks:
+      - kavout
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: cats
-
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: kazh
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
-    ports:
-      - 5432:5432
-
   web:
+    container_name: kavout_kazh
     build: .
-    command: npm run dev
-    volumes:
-      - .:/usr/app/
-      - /usr/app/node_modules
-
-    ports:
-      - "3000:3000"
+    networks:
+      - kavout
     depends_on:
       - db
+    ports:
+      - 3000:3000
+
+networks:
+  kavout:
+    driver: bridge
