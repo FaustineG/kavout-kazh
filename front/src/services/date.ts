@@ -1,6 +1,6 @@
 export const formatDate = (timestamp: string) => {
   const d = new Date(timestamp)
-  return d.toLocaleDateString() + ' ' + d.toLocaleTimeString()
+  return d.toLocaleDateString('fr-FR') + ' ' + d.toLocaleTimeString('fr-FR')
 }
 
 export const formatRelativeDate = (timestamp: string) => {

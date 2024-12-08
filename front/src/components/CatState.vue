@@ -9,7 +9,7 @@
       </div>
 
       <div>
-        depuis <span class="info">{{ formatDate(state.timestamp) }}</span>
+        depuis <span class="info">{{ formatRelativeDate(state.timestamp) }}</span>
       </div>
     </template>
 
@@ -24,7 +24,7 @@ import type { MoveCatPayload } from '@/models/action'
 import type { Cat } from '@/models/cat'
 import type { CatState } from '@/models/state'
 import { getCatState } from '@/services/api'
-import { formatDate } from '@/services/date'
+import { formatRelativeDate } from '@/services/date'
 import { onMounted, ref } from 'vue'
 
 const { cat } = defineProps<{ cat: Cat }>()
@@ -61,6 +61,10 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  .title {
+    margin-bottom: 10px;
+  }
 
   .cat-photo {
     width: 100px;

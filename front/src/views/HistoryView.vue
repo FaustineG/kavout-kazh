@@ -1,7 +1,8 @@
 <template>
   <h1 class="title">Historique</h1>
-
-  <HistoryTable v-if="!isLoading && historyActions" :actions="historyActions" />
+  <section>
+    <HistoryTable v-if="!isLoading && historyActions" :actions="historyActions" />
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -24,7 +25,8 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-thead {
-  font-weight: bold;
+section {
+  display: flex;
+  justify-content: center;
 }
 </style>

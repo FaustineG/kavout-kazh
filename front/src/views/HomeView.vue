@@ -47,7 +47,7 @@ const onMoveCat = async (cat_id: string, payload: MoveCatPayload) => {
 .cats {
   display: flex;
   flex-direction: column;
-  gap: 5em;
+  gap: 2em;
   height: 100%;
   justify-content: center;
 }

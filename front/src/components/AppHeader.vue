@@ -25,6 +25,11 @@ header {
     display: flex;
     justify-content: space-around;
     gap: 10px;
+
+    .router-link-active {
+      text-decoration: underline;
+      color: var(--bulma-link-text);
+    }
   }
 }
 </style>

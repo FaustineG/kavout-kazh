@@ -44,6 +44,10 @@ const orderedActions = computed(() =>
 .details {
   display: flex;
 }
+thead {
+  font-weight: bold;
+}
+
 table {
   margin-bottom: var(--footer-height);
 }
