@@ -9,7 +9,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="historyAction in actions" :key="historyAction.action_id">
+      <tr v-for="historyAction in orderedActions" :key="historyAction.action_id">
         <td>{{ historyAction.cat_name }}</td>
         <td>{{ historyAction.where_from }} -> {{ historyAction.where_to }}</td>
         <td>
@@ -31,8 +31,13 @@ import CommentDetail from './CommentDetail.vue'
 import RelativeDate from './RelativeDate.vue'
 import UserDetail from './UserDetail.vue'
 import type { HistoryAction } from '@/models/action'
+import { computed } from 'vue'
 
-defineProps<{ actions: HistoryAction[] }>()
+const props = defineProps<{ actions: HistoryAction[] }>()
+
+const orderedActions = computed(() =>
+  [...props.actions].sort((a1, a2) => (new Date(a1.timestamp) > new Date(a2.timestamp) ? -1 : 1))
+)
 </script>
 
 <style lang="scss" scoped>
