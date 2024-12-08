@@ -10,12 +10,12 @@
         <div class="field">
           <label class="label">
             Je suis
-            <input class="input" type="text" v-model="user" />
+            <input class="input" type="text" v-model="currentUser" />
           </label>
         </div>
         <div class="field">
           <label class="label">
-            Ou va le Chat ?
+            Ou va le chat ?
             <input class="input" type="text" v-model="whereTo" />
           </label>
         </div>
@@ -37,18 +37,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { useUser } from '@/services/user'
+import { onMounted, ref } from 'vue'
 
 const emits = defineEmits<{
   move: [payload: { whereTo: string; comment: string; user: string }]
   close: []
 }>()
 
+const { currentUser, loadUserLocal } = useUser()
 const whereTo = ref('')
 const comment = ref('')
-const user = ref('')
+onMounted(loadUserLocal)
 
 const onMoveCat = () => {
-  emits('move', { whereTo: whereTo.value, comment: comment.value, user: user.value })
+  emits('move', { whereTo: whereTo.value, comment: comment.value, user: currentUser.value })
 }
 </script>
