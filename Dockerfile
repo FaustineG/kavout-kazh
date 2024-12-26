@@ -4,9 +4,9 @@ WORKDIR /usr/app
 COPY . .
 
 WORKDIR /usr/app/front
-RUN npm install --quiet
+RUN npm install 
 RUN npm run build
-COPY ./front/dist /usr/app/back/public
+RUN cp -R ./dist /usr/app/back/public
 
 WORKDIR /usr/app/back
 RUN npm install --quiet
