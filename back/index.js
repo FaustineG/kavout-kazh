@@ -18,7 +18,7 @@ const pool = new Pool(config);
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Allow requests from this origin
+    origin: process.env.APP_URL, // Allow requests from this origin
   }),
   express.static("public")
 );
