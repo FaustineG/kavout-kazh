@@ -8,7 +8,7 @@ const Pool = require("pg").Pool;
 app.use(express.json()); // to support JSON-encoded bodies
 
 const config = {
-  host: "db_kavout_kazh",
+  host: process.env.DB_HOST,
   database: "kazh",
   user: "postgres",
   password: "postgres",
@@ -48,6 +48,7 @@ app.get("/actions", (req, res) => {
 
 app.post("/action", async (req, res) => {
   console.log(`POST /action`);
+  const client = await pool.connect();
 
   const { cat_id, where_to, by_user, comment } = req.body;
 
@@ -71,22 +72,25 @@ app.post("/action", async (req, res) => {
     VALUES (${cat_id}, '${timestamp}', '${where_from}', '${where_to}', '${by_user}', '${comment}')
 
     RETURNING action_id;`;
+    let action_id;
 
     try {
-      const queryResult = await pool.query(insertQuery);
+      await client.query("BEGIN");
+      const queryResult = await client.query(insertQuery);
+      await client.query("COMMIT");
 
-      const action_id = queryResult.rows[0].action_id;
-
+      action_id = queryResult.rows[0].action_id;
+    } catch (e) {
+      console.error("error with query", e);
+      res.status(400).json(e);
+    } finally {
+      client.release();
+      res.status(200).json(action_id);
       console.log(
         "New action inserted with ID:",
         action_id,
         `(${cat_id}, '${timestamp}', '${where_from}', '${where_to}', '${by_user}', '${comment}')`
       );
-
-      res.status(200).json(action_id);
-    } catch (e) {
-      console.error("error with query", e);
-      res.status(400).json(e);
     }
   });
 });
