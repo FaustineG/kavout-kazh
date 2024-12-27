@@ -53,7 +53,7 @@ app.post("/action", async (req, res) => {
 
   const timestamp = new Date().toISOString();
   const whereFromQuery = `
-        SELECT where_from
+        SELECT where_to
         FROM actions
         WHERE cat_id = ${cat_id}
         ORDER BY timestamp DESC
@@ -63,7 +63,7 @@ app.post("/action", async (req, res) => {
     if (error) {
       throw error;
     }
-    const where_from = results.rows[0].where_from;
+    const where_from = results.rows[0].where_to;
 
     const insertQuery = `
     INSERT INTO actions (cat_id, timestamp, where_from, where_to, by_user, comment)

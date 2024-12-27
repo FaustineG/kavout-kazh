@@ -1,5 +1,10 @@
 <template>
-  <div @mouseenter="onHover" @mouseleave="onHoverLeave">
+  <div
+    @mouseenter="onHover"
+    @mouseover="onHover"
+    @mouseleave="onHoverLeave"
+    @mouseout="onHoverLeave"
+  >
     <div class="tooltip" v-show="tooltipVisible">{{ tooltipText }}</div>
 
     <slot></slot>
@@ -8,6 +13,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
 const props = defineProps<{ tooltipText: string }>()
 
 const tooltipVisible = ref(false)
