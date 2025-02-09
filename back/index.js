@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const p = 3000;
 const cors = require("cors");
+const path = require("node:path");
 
 const Pool = require("pg").Pool;
 app.use(express.json()); // to support JSON-encoded bodies
@@ -22,7 +23,8 @@ app.use(
   }),
   express.static("public")
 );
-app.get("/actions", (req, res) => {
+
+app.get("/api/actions", (req, res) => {
   pool.query(
     `SELECT
     actions.action_id,
@@ -35,8 +37,8 @@ app.get("/actions", (req, res) => {
     cats.name AS cat_name
   FROM
     actions
-  INNER JOIN cats ON actions.cat_id = cats.cat_id;
-  `,
+    INNER JOIN cats ON actions.cat_id = cats.cat_id;
+    `,
     (error, results) => {
       if (error) {
         throw error;
@@ -46,7 +48,7 @@ app.get("/actions", (req, res) => {
   );
 });
 
-app.post("/action", async (req, res) => {
+app.post("/api/action", async (req, res) => {
   console.log(`POST /action`);
   const client = await pool.connect();
 
@@ -70,7 +72,7 @@ app.post("/action", async (req, res) => {
     INSERT INTO actions (cat_id, timestamp, where_from, where_to, by_user, comment)
     
     VALUES (${cat_id}, '${timestamp}', '${where_from}', '${where_to}', '${by_user}', '${comment}')
-
+    
     RETURNING action_id;`;
     let action_id;
 
@@ -95,7 +97,7 @@ app.post("/action", async (req, res) => {
   });
 });
 
-app.get("/cats", (req, res) => {
+app.get("/api/cats", (req, res) => {
   console.log(`GET /cats`);
 
   pool.query("SELECT * FROM cats", (error, results) => {
@@ -106,7 +108,7 @@ app.get("/cats", (req, res) => {
   });
 });
 
-app.get("/state/:id", (req, res) => {
+app.get("/api/state/:id", (req, res) => {
   const catId = req.params.id;
   console.log(`GET /state/${catId}`);
 
@@ -117,14 +119,14 @@ app.get("/state/:id", (req, res) => {
     actions.where_to,
     actions.where_from,
     actions.by_user
-FROM
+    FROM
     actions
     INNER JOIN cats ON actions.cat_id = cats.cat_id
-WHERE
+    WHERE
     actions.cat_id = ${catId}
-ORDER BY
+    ORDER BY
     timestamp DESC
-LIMIT
+    LIMIT
     1;`,
     (error, results) => {
       if (error) {
@@ -134,6 +136,9 @@ LIMIT
       res.status(200).json(results.rows[0]);
     }
   );
+});
+app.get("*", function (req, res, next) {
+  res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
 app.listen(p, () => {
