@@ -10,4 +10,4 @@ RUN cp -R ./dist /usr/app/back/public
 
 WORKDIR /usr/app/back
 RUN npm install --quiet
-CMD npm run dev
+CMD npm run start
