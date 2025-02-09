@@ -2,7 +2,7 @@ import type { HistoryAction, MoveCatPayload } from '@/models/action'
 import type { Cat } from '@/models/cat'
 import type { CatState } from '@/models/state'
 
-const API_URL = import.meta.env.VITE_API_URL
+const API_URL = `${import.meta.env.VITE_API_URL}/api`
 
 export const getHistoryActions = (): Promise<HistoryAction[]> =>
   fetch(`${API_URL}/actions`).then((res) => res.json())

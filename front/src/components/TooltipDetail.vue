@@ -29,7 +29,7 @@ const onHoverLeave = () => {
 
 <style>
 .tooltip {
-  position: fixed;
+  position: absolute;
   background: var(--bulma-background);
   padding: 10px;
   border: 1px solid var(--bulma-border);
