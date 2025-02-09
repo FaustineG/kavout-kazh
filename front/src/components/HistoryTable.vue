@@ -13,7 +13,7 @@
         <td>{{ historyAction.cat_name }}</td>
         <td>{{ historyAction.where_from }} -> {{ historyAction.where_to }}</td>
         <td>
-          <RelativeDate :timestamp="historyAction.timestamp" />
+          {{ formatDate(historyAction.timestamp) }}
         </td>
         <td>
           <div class="details">
@@ -28,9 +28,9 @@
 
 <script setup lang="ts">
 import CommentDetail from './CommentDetail.vue'
-import RelativeDate from './RelativeDate.vue'
 import UserDetail from './UserDetail.vue'
 import type { HistoryAction } from '@/models/action'
+import { formatDate } from '@/services/date'
 import { computed } from 'vue'
 
 const props = defineProps<{ actions: HistoryAction[] }>()
