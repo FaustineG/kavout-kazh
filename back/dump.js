@@ -10,7 +10,7 @@ const config = {
 };
 const pool = new Pool(config);
 
-const allInserts = dump.slice(0, 10).map((line) => {
+const allInserts = dump.slice(-10).map((line) => {
   const {
     action_id,
     cat_id,
@@ -25,4 +25,5 @@ const allInserts = dump.slice(0, 10).map((line) => {
 });
 
 const insertQuery = `INSERT INTO actions (action_id, cat_id, timestamp, where_from, where_to, by_user, comment) VALUES `;
-pool.query(insertQuery + allInserts.join(", "));
+console.log(insertQuery + allInserts.join(", ") + ";");
+// pool.query(insertQuery + allInserts.join(", "));
