@@ -43,11 +43,7 @@ const closeModal = () => {
 
 const onMoveCat = (payload: MoveCatPayload) => {
   console.log('MOVE CAT', payload, cat)
-  emits('move', cat.cat_id, {
-    where_to: payload.whereTo,
-    timestamp: payload.timestamp,
-    by_user: payload.user
-  })
+  emits('move', cat.cat_id, payload)
   closeModal()
 }
 const state = ref<CatState | null>()

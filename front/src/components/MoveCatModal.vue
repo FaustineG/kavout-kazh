@@ -58,29 +58,30 @@
 </template>
 
 <script setup lang="ts">
+import type { MoveCatPayload } from '@/models/action'
 import { formatDateForDatepicker, formatTimeForTimepicker } from '@/services/date'
 import { useUser } from '@/services/user'
 import { onMounted, ref } from 'vue'
 
 const emits = defineEmits<{
-  move: [payload: { whereTo: string; comment: string; user: string }]
+  move: [payload: MoveCatPayload]
   close: []
 }>()
 
 const { currentUser, loadUserLocal } = useUser()
 const whereTo = ref('')
-const date = ref(formatDateForDatepicker(new Date()))
-const time = ref(formatTimeForTimepicker(new Date()))
+const date = ref(formatDateForDatepicker(new Date().toString()))
+const time = ref(formatTimeForTimepicker(new Date().toString()))
 
 const resetDateTime = () => {
-  date.value = formatDateForDatepicker(new Date())
-  time.value = formatTimeForTimepicker(new Date())
+  date.value = formatDateForDatepicker(new Date().toString())
+  time.value = formatTimeForTimepicker(new Date().toString())
 }
 onMounted(loadUserLocal)
 
 const onMoveCat = () => {
   const timestamp = date.value + ' ' + time.value
-  emits('move', { whereTo: whereTo.value, user: currentUser.value, timestamp })
+  emits('move', { where_to: whereTo.value, by_user: currentUser.value, timestamp })
 }
 </script>
 
