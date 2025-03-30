@@ -19,10 +19,31 @@
             <input class="input" type="text" v-model="whereTo" />
           </label>
         </div>
+
         <div class="field">
           <label class="label">
-            Commentaire
-            <textarea class="textarea" v-model="comment"></textarea>
+            Quand
+            <div class="datetime">
+              <input class="input" type="date" v-model="date" />
+              <input class="input" type="time" v-model="time" min="00:00" max="24:00" />
+              <button class="button" @click="resetDateTime">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-rotate-ccw-icon lucide-rotate-ccw"
+                >
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                  <path d="M3 3v5h5" />
+                </svg>
+              </button>
+            </div>
           </label>
         </div>
       </section>
@@ -37,6 +58,7 @@
 </template>
 
 <script setup lang="ts">
+import { formatDateForDatepicker, formatTimeForTimepicker } from '@/services/date'
 import { useUser } from '@/services/user'
 import { onMounted, ref } from 'vue'
 
@@ -47,10 +69,24 @@ const emits = defineEmits<{
 
 const { currentUser, loadUserLocal } = useUser()
 const whereTo = ref('')
-const comment = ref('')
+const date = ref(formatDateForDatepicker(new Date()))
+const time = ref(formatTimeForTimepicker(new Date()))
+
+const resetDateTime = () => {
+  date.value = formatDateForDatepicker(new Date())
+  time.value = formatTimeForTimepicker(new Date())
+}
 onMounted(loadUserLocal)
 
 const onMoveCat = () => {
-  emits('move', { whereTo: whereTo.value, comment: comment.value, user: currentUser.value })
+  const timestamp = date.value + ' ' + time.value
+  emits('move', { whereTo: whereTo.value, user: currentUser.value, timestamp })
 }
 </script>
+
+<style lang="scss" scoped>
+.datetime {
+  display: flex;
+  gap: 1em;
+}
+</style>

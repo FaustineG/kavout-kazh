@@ -41,11 +41,11 @@ const closeModal = () => {
   isModalOpen.value = false
 }
 
-const onMoveCat = (payload: { whereTo: string; comment: string; user: string }) => {
+const onMoveCat = (payload: MoveCatPayload) => {
   console.log('MOVE CAT', payload, cat)
   emits('move', cat.cat_id, {
     where_to: payload.whereTo,
-    comment: payload.comment,
+    timestamp: payload.timestamp,
     by_user: payload.user
   })
   closeModal()
