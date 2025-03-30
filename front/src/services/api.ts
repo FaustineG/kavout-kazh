@@ -12,10 +12,11 @@ export const getCatState = (catId: string): Promise<CatState> =>
 
 export const getCats = (): Promise<Cat[]> => fetch(`${API_URL}/cats`).then((res) => res.json())
 
-export const moveCat = (catId: string, payload: MoveCatPayload) => {
-  fetch(`${API_URL}/action`, {
+export const moveCat = async (catId: string, payload: MoveCatPayload) => {
+  const actionId = await fetch(`${API_URL}/action`, {
     method: 'POST',
     body: JSON.stringify({ cat_id: catId, ...payload }),
     headers: { 'Content-Type': 'application/json' }
   }).then((res) => res.json())
+  return actionId
 }

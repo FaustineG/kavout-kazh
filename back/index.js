@@ -52,9 +52,8 @@ app.post("/api/action", async (req, res) => {
   console.log(`POST /action`);
   const client = await pool.connect();
 
-  const { cat_id, where_to, by_user, comment } = req.body;
+  const { cat_id, where_to, by_user, timestamp } = req.body;
 
-  const timestamp = new Date().toISOString();
   const whereFromQuery = `
         SELECT where_to
         FROM actions
@@ -69,9 +68,9 @@ app.post("/api/action", async (req, res) => {
     const where_from = results.rows[0].where_to;
 
     const insertQuery = `
-    INSERT INTO actions (cat_id, timestamp, where_from, where_to, by_user, comment)
+    INSERT INTO actions (cat_id, timestamp, where_from, where_to, by_user)
     
-    VALUES (${cat_id}, '${timestamp}', '${where_from}', '${where_to}', '${by_user}', '${comment}')
+    VALUES (${cat_id}, '${timestamp}', '${where_from}', '${where_to}', '${by_user}')
     
     RETURNING action_id;`;
     let action_id;
@@ -87,12 +86,12 @@ app.post("/api/action", async (req, res) => {
       res.status(400).json(e);
     } finally {
       client.release();
-      res.status(200).json(action_id);
       console.log(
         "New action inserted with ID:",
         action_id,
-        `(${cat_id}, '${timestamp}', '${where_from}', '${where_to}', '${by_user}', '${comment}')`
+        `(${cat_id}, '${timestamp}', '${where_from}', '${where_to}', '${by_user}')`
       );
+      res.status(200).json(action_id);
     }
   });
 });
@@ -152,13 +151,6 @@ app.listen(p, () => {
  ( (  )   (  ) )                                          ( (  )   (  ) )
 (__(__)___(__)__)                                        (__(__)___(__)__)
 
-    
- 
   
-
-   
-
-
-
     `);
 });

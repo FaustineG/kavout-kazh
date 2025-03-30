@@ -3,6 +3,24 @@ export const formatDate = (timestamp: string) => {
   return d.toLocaleDateString('fr-FR') + ' ' + d.toLocaleTimeString('fr-FR')
 }
 
+const addZero = (n: number) => {
+  if (n < 10) {
+    return '0' + n
+  } else {
+    return n.toString()
+  }
+}
+
+export const formatDateForDatepicker = (timestamp: string) => {
+  const d = new Date(timestamp)
+  return d.getFullYear() + '-' + addZero(d.getMonth() + 1) + '-' + addZero(d.getDate())
+}
+
+export const formatTimeForTimepicker = (timestamp: string) => {
+  const d = new Date(timestamp)
+  return addZero(d.getHours()) + ':' + addZero(d.getMinutes()) + ':' + addZero(d.getSeconds())
+}
+
 export const formatRelativeDate = (timestamp: string) => {
   const now = new Date()
   return dateDifference(timestamp, now.toISOString())

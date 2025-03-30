@@ -33,8 +33,8 @@ const onMoveCat = async (cat_id: string, payload: MoveCatPayload) => {
   try {
     await moveCat(cat_id, {
       where_to: payload.where_to,
-      comment: payload.comment,
-      by_user: payload.by_user
+      by_user: payload.by_user,
+      timestamp: payload.timestamp
     })
     await loadCats()
   } catch (e) {

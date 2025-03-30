@@ -12,5 +12,5 @@ export interface HistoryAction {
 export interface MoveCatPayload {
   where_to: string
   by_user: string
-  comment: string
+  timestamp: string
 }
