@@ -23,7 +23,6 @@ app.use(
   }),
   express.static("public")
 );
-
 app.get("/api/actions", (req, res) => {
   pool.query(
     `SELECT
@@ -35,7 +34,7 @@ app.get("/api/actions", (req, res) => {
     actions.comment,
     actions.cat_id,
     cats.name AS cat_name
-  FROM
+    FROM
     actions
     INNER JOIN cats ON actions.cat_id = cats.cat_id;
     `,
@@ -48,6 +47,65 @@ app.get("/api/actions", (req, res) => {
   );
 });
 
+app.post("/api/action:switch", async (req, res) => {
+  console.log(`POST /action:switch`);
+  const client = await pool.connect();
+
+  const { by_user, cats } = req.body;
+  const cat1 = cats[0];
+  const cat2 = cats[1];
+
+  const whereIsCat1Query = `
+        SELECT where_to
+        FROM actions
+        WHERE cat_id = ${cat1.cat_id}
+        ORDER BY timestamp DESC
+        LIMIT 1`;
+
+  const whereIsCat2Query = `
+        SELECT where_to
+        FROM actions
+        WHERE cat_id = ${cat2.cat_id}
+        ORDER BY timestamp DESC
+        LIMIT 1`;
+
+  pool.query(whereIsCat1Query, async (error1, resultsCat1) => {
+    if (error1) throw error1;
+    pool.query(whereIsCat2Query, async (error2, resultsCat2) => {
+      if (error2) throw error2;
+      const where_from_1 = resultsCat1.rows[0].where_to;
+      const where_from_2 = resultsCat2.rows[0].where_to;
+
+      const timestamp = new Date().toISOString();
+
+      const insertQuery = `
+    INSERT INTO actions (cat_id, timestamp, where_from, where_to, by_user, comment)
+
+    VALUES 
+    (${cat1.cat_id}, '${timestamp}', '${where_from_1}', '${where_from_2}', '${by_user}', 'switch'),
+    (${cat2.cat_id}, '${timestamp}', '${where_from_2}', '${where_from_1}', '${by_user}', 'switch')
+
+    RETURNING action_id;`;
+      let action_ids;
+
+      try {
+        await client.query("BEGIN");
+        const queryResult = await client.query(insertQuery);
+        await client.query("COMMIT");
+
+        action_ids = queryResult.rows.map((r) => r.action_id);
+      } catch (e) {
+        console.error("error with query", e);
+        res.status(400).json(e);
+      } finally {
+        client.release();
+        console.log("New actions inserted with ID:", action_ids.join(", "));
+        res.status(200).json(action_ids);
+      }
+    });
+  });
+});
+
 app.post("/api/action", async (req, res) => {
   console.log(`POST /action`);
   const client = await pool.connect();
@@ -55,11 +113,11 @@ app.post("/api/action", async (req, res) => {
   const { cat_id, where_to, by_user, timestamp } = req.body;
 
   const whereFromQuery = `
-        SELECT where_to
-        FROM actions
-        WHERE cat_id = ${cat_id}
-        ORDER BY timestamp DESC
-        LIMIT 1`;
+          SELECT where_to
+          FROM actions
+          WHERE cat_id = ${cat_id}
+          ORDER BY timestamp DESC
+          LIMIT 1`;
 
   pool.query(whereFromQuery, async (error, results) => {
     if (error) {
@@ -136,6 +194,7 @@ app.get("/api/state/:id", (req, res) => {
     }
   );
 });
+
 app.get("*", function (req, res, next) {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });

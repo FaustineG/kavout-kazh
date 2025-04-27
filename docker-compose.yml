@@ -11,6 +11,7 @@ services:
       POSTGRES_DB: kazh
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db_data:/var/lib/postgresql/data
 
   web:
     container_name: kavout_kazh
@@ -26,3 +27,6 @@ services:
 networks:
   kavout:
     driver: bridge
+
+volumes:
+  db_data:

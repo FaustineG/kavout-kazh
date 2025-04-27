@@ -13,5 +13,8 @@
   "description": "",
   "dependencies": {
     "concurrently": "^9.0.1"
+  },
+  "volta": {
+    "node": "23.10.0"
   }
 }

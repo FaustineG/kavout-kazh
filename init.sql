@@ -3,7 +3,7 @@ CREATE TABLE cats (cat_id SERIAL PRIMARY KEY, name TEXT);
 CREATE TABLE actions (
     action_id SERIAL PRIMARY KEY,
     cat_id INT REFERENCES cats(cat_id),
-    timestamp TIMESTAMP,
+    timestamp TIMESTAMPTZ,
     where_to TEXT,
     where_from TEXT,
     by_user TEXT,
