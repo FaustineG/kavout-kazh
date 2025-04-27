@@ -80,7 +80,7 @@ const resetDateTime = () => {
 onMounted(loadUserLocal)
 
 const onMoveCat = () => {
-  const timestamp = date.value + ' ' + time.value
+  const timestamp = new Date(date.value + ' ' + time.value).toISOString()
   emits('move', { where_to: whereTo.value, by_user: currentUser.value, timestamp })
 }
 </script>
