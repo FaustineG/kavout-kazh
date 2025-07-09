@@ -4,8 +4,8 @@ import type { CatState } from '@/models/state'
 
 const API_URL = `${import.meta.env.VITE_API_URL}/api`
 
-export const getHistoryActions = (): Promise<HistoryAction[]> =>
-  fetch(`${API_URL}/actions`).then((res) => res.json())
+export const getHistoryActions = (filters: { limit: number | null }): Promise<HistoryAction[]> =>
+  fetch(`${API_URL}/actions?limit=${filters.limit}`).then((res) => res.json())
 
 export const getCatState = (catId: string): Promise<CatState> =>
   fetch(`${API_URL}/state/${catId}`).then((res) => res.json())

@@ -24,8 +24,8 @@ app.use(
   express.static("public")
 );
 app.get("/api/actions", (req, res) => {
-  pool.query(
-    `SELECT
+  console.log(`GET /actions`);
+  let query = `SELECT
     actions.action_id,
     actions.where_from,
     actions.where_to,
@@ -36,15 +36,18 @@ app.get("/api/actions", (req, res) => {
     cats.name AS cat_name
     FROM
     actions
-    INNER JOIN cats ON actions.cat_id = cats.cat_id;
-    `,
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      res.status(200).json(results.rows);
+    INNER JOIN cats ON actions.cat_id = cats.cat_id
+    `;
+  if (req.query.limit) {
+    query += ` 
+    LIMIT ${req.query.limit}`;
+  }
+  pool.query(`${query};`, (error, results) => {
+    if (error) {
+      throw error;
     }
-  );
+    res.status(200).json(results.rows);
+  });
 });
 
 app.post("/api/action:switch", async (req, res) => {
