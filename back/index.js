@@ -198,7 +198,7 @@ app.get("/api/state/:id", (req, res) => {
   );
 });
 
-app.get("*", function (req, res, next) {
+app.get("*index", function (req, res, next) {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
