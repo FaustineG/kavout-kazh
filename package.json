@@ -12,7 +12,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "concurrently": "^9.0.1"
+    "@vue/eslint-config-typescript": "^14.9.0",
+    "concurrently": "^10.0.6",
+    "eslint": "^10.13.0",
+    "eslint-plugin-vue": "^10.11.1"
   },
   "volta": {
     "node": "23.10.0"
