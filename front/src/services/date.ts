@@ -1,6 +1,11 @@
-export const formatDate = (timestamp: string) => {
+export const formatDateForDisplay = (timestamp: string) => {
   const d = new Date(timestamp)
-  return d.toLocaleDateString('fr-FR') + ' ' + d.toLocaleTimeString('fr-FR')
+  return d.toLocaleDateString('fr-FR', { day: "2-digit", month: "2-digit", weekday: "short" }) + ' ' + d.toLocaleTimeString('fr-FR', { hour: "2-digit", minute: "2-digit" })
+}
+
+export const formatToAPITimestamp = (date: string, time: string) => {
+
+  return new Date(date + ' ' + time).toISOString()
 }
 
 const addZero = (n: number) => {

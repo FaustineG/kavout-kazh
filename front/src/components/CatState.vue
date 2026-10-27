@@ -14,7 +14,7 @@
     </template>
 
     <button class="button is-primary" @click="openModal">MOVE THE CAT</button>
-    <MoveCatModal v-if="isModalOpen" @close="closeModal" @move="onMoveCat" />
+    <MoveCatModal v-if="isModalOpen" :cat="cat" @close="closeModal" @move="onMoveCat" />
   </div>
 </template>
 

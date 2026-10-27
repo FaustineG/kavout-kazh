@@ -9,6 +9,14 @@ export interface HistoryAction {
   timestamp: string
 }
 
+export interface UpdateActionPayload {
+  where_from: string
+  where_to: string
+  comment: string
+  by_user: string
+  timestamp: string
+}
+
 export interface MoveCatPayload {
   where_to: string
   by_user: string

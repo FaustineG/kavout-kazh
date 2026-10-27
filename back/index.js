@@ -23,6 +23,7 @@ app.use(
   }),
   express.static("public")
 );
+
 app.get("/api/actions", (req, res) => {
   console.log(`GET /actions`);
   let query = `SELECT
@@ -155,6 +156,51 @@ app.post("/api/action", async (req, res) => {
       res.status(200).json(action_id);
     }
   });
+});
+
+app.put("/api/action/:id", async (req, res) => {
+  console.log(`PUT /action/:id`);
+  const client = await pool.connect();
+
+  const { id } = req.params;
+  const { where_to, where_from, by_user, timestamp, comment } = req.body;
+
+
+
+  const updateQuery = `
+    UPDATE actions 
+
+    SET 
+    timestamp = '${timestamp}',
+    where_from = '${where_from}',
+    where_to = '${where_to}',
+    comment = '${comment}',
+    by_user= '${by_user}'
+
+    WHERE 
+    action_id = ${id};`;
+
+  console.log(updateQuery)
+
+
+  try {
+    await client.query("BEGIN");
+
+    const queryResult = await client.query(updateQuery);
+    await client.query("COMMIT");
+
+  } catch (e) {
+    console.error("error with query", e);
+    res.status(400).json(e);
+  } finally {
+    client.release();
+    console.log(
+      "Action updated with ID:",
+      id,
+      `('${timestamp}', '${where_from}', '${where_to}', '${by_user}', '${comment})`
+    );
+    res.status(200).json(id);
+  }
 });
 
 app.get("/api/cats", (req, res) => {

@@ -1,4 +1,4 @@
-import type { HistoryAction, MoveCatPayload } from '@/models/action'
+import type { HistoryAction, MoveCatPayload, UpdateActionPayload } from '@/models/action'
 import type { Cat } from '@/models/cat'
 import type { CatState } from '@/models/state'
 
@@ -24,6 +24,15 @@ export const switchCats = async ({ by_user, cats }: { by_user: string; cats: Cat
   const actionId = await fetch(`${API_URL}/action:switch`, {
     method: 'POST',
     body: JSON.stringify({ by_user, cats }),
+    headers: { 'Content-Type': 'application/json' }
+  }).then((res) => res.json())
+  return actionId
+}
+
+export const updateAction = async (action_id: string, payload: UpdateActionPayload) => {
+  const actionId = await fetch(`${API_URL}/action/${action_id}`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
     headers: { 'Content-Type': 'application/json' }
   }).then((res) => res.json())
   return actionId

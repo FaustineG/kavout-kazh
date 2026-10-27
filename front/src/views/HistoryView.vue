@@ -1,15 +1,17 @@
 <template>
   <h1 class="title">Historique</h1>
   <section>
-    <HistoryTable v-if="!isLoading && historyActions" :actions="historyActions" />
+    <HistoryTable v-if="!isLoading && historyActions" :actions="historyActions" @update-action="onUpdateAction" />
     <button v-if="limit !== null" @click="onViewMore" class="view-more">Charger plus</button>
   </section>
 </template>
 
 <script setup lang="ts">
+import type { EditActionPayload } from '@/components/EditAction.vue'
 import HistoryTable from '@/components/HistoryTable.vue'
 import type { HistoryAction } from '@/models/action'
-import { getHistoryActions } from '@/services/api'
+import { getHistoryActions, updateAction } from '@/services/api'
+import { formatToAPITimestamp } from '@/services/date'
 import { onMounted, ref } from 'vue'
 
 const isLoading = ref(false)
@@ -33,6 +35,12 @@ const onViewMore = () => {
   } else {
     limit.value = null
   }
+  loadHistory()
+}
+
+
+const onUpdateAction = async (action_id: string, payload: EditActionPayload) => {
+  await updateAction(action_id, { by_user: payload.user, comment: payload.comment, timestamp: formatToAPITimestamp(payload.date, payload.time), where_from: payload.whereFrom, where_to: payload.whereTo })
   loadHistory()
 }
 </script>
